@@ -1,0 +1,25 @@
+#chatBox {
+  display: flex;
+  flex-direction: column;
+}
+
+.message {
+  margin: 10px 0;
+  padding: 10px;
+  border-radius: 10px;
+  max-width: 80%;
+}
+
+.user-message {
+  align-self: flex-end;
+  background-color: #dcf8c6;
+}
+
+.bot-message {
+  align-self: flex-start;
+  background-color: #f1f0f0;
+}
+
+#userInput {
+  border-radius: 20px;
+}

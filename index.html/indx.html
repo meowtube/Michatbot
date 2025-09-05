@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Chatbot Inteligente - Gemini</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Tu CSS personalizado -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="bg-light">
+
+  <div class="container mt-5">
+    <h1 class="text-center mb-4">🤖 Chatbot con Gemini (Google)</h1>
+
+    <!-- Área del chat -->
+    <div id="chatBox" class="border rounded p-3 mb-3" style="height: 400px; overflow-y: auto; background: white;">
+      <!-- Mensajes aparecerán aquí -->
+    </div>
+
+    <!-- Input y botón -->
+    <div class="input-group">
+      <input type="text" id="userInput" class="form-control" placeholder="Escribe tu pregunta..." />
+      <button id="sendBtn" class="btn btn-primary">Enviar</button>
+    </div>
+  </div>
+
+  
+  <script>
+    // Reemplaza esta URL con la de tu API real
+  
+    const API_URL = 'AIzaSyCzbvCIvp12fNriJ0oRPE206clxpqQhr-U'; // Reemplaza con la URL real de tu API
+
+    async function enviarPregunta(pregunta) {
+      try {
+        const response = await fetch(API_URL, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ mensaje: pregunta })
+        });
+        const data = await response.json();
+        return data.respuesta || "No se recibió respuesta del bot.";
+      } catch (error) {
+        return "Error al conectar con el chatbot.";
+      }
+    }
+
+    document.getElementById('sendBtn').addEventListener('click', async function() {
+      const userInput = document.getElementById('userInput').value.trim();
+      if (userInput !== "") {
+        const chatBox = document.getElementById('chatBox');
+        // Mostrar mensaje del usuario
+        const userMsg = document.createElement('div');
+        userMsg.className = 'text-end mb-2';
+        userMsg.innerHTML = `<span class="badge bg-primary">${userInput}</span>`;
+        chatBox.appendChild(userMsg);
+        chatBox.scrollTop = chatBox.scrollHeight;
+        document.getElementById('userInput').value = '';
+
+        // Obtener respuesta del bot
+        const botRespuesta = await enviarPregunta(userInput);
+        const botMsg = document.createElement('div');
+        botMsg.className = 'text-start mb-2';
+        botMsg.innerHTML = `<span class="badge bg-secondary">${botRespuesta}</span>`;
+        chatBox.appendChild(botMsg);
+        chatBox.scrollTop = chatBox.scrollHeight;
+      }
+    });
+
+    // Permitir enviar con Enter
+    document.getElementById('userInput').addEventListener('keydown', function(e) {
+      if (e.key === 'Enter') {
+        document.getElementById('sendBtn').click();
+      }
+    });
+  </script>
+</body>
+</html>
